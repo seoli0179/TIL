@@ -268,7 +268,7 @@ for (int i = 0; i < n / 2; i++) {
 
 3. 풀이과정
 
-![](C:\Users\yeoub\Documents\카카오톡 받은 파일\KakaoTalk_20220519_221239298.jpg)
+![KakaoTalk_20220519_221239298](https://user-images.githubusercontent.com/105831105/169312266-b44248da-98b2-4827-84a1-d26ce8027784.jpg)
 
 4. 정답
 
@@ -354,7 +354,7 @@ public static int solution(int[] height) {
 
 ### 4. 풀이과정
 
-![](C:\Users\yeoub\Documents\카카오톡 받은 파일\KakaoTalk_20220519_225235995.jpg)
+![KakaoTalk_20220519_225235995](https://user-images.githubusercontent.com/105831105/169312459-d075fa31-cb24-42d7-9bae-e1e9b4030651.jpg)
 
 ### 5. 정답
 
