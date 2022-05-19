@@ -71,22 +71,23 @@
 
 4. 코드
 
-  ````markdown
-  `inline code`
-  
-  ```python
-  for i in range(10):
-  	print(i)
-  ```
-  
-  ```bash
-  $ touch test.txt
-  ```
-  
-  ```
-  Just plain text
-  ```
-  ````
+	````markdown
+	`inline code`
+	
+	```python
+
+	for i in range(10):
+	print(i)
+	```
+	
+	```bash
+	$ touch test.txt
+	```
+	
+	```
+	Just plain text
+	```
+	````
 
 5. 링크
 
