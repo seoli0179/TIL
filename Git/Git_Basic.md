@@ -204,14 +204,11 @@ origin  https://github.com/Username/RepositoryName.git (push)
 $ git remote rm origin
 ```
 
-### 03) 업로드
+### 03) 명령어
 
 ```bash
 $ git add .
 $ git commit -m "간단한 이유"
-
-# add + commit
-$ git commit -a
 
 $ git push origin master
 
