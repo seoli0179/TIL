@@ -62,6 +62,16 @@
 
 ## 16. 스트림
 
+### 1. HashSet
+
+- 중복값을 허용하지 않는다.
+
+### 2. TreeSet
+
+- 순서를 보장한다.
+
+
+
 ---
 
 # 연습문제
@@ -386,9 +396,107 @@ public static int solution(int[] height) {
 }
 ```
 
-
-
 ---
 
+## 로또 당첨 프로그램
 
+### 1. 문제
+
+- 로또를 구매하고 당첨번호랑 비교하여 일치 여부 판단하기
+
+### 2. 입출력 예시
+
+```java
+[로또 당첨 프로그램]
+
+로또 개수를 입력해 주세요.(숫자 1 ~ 10) : 2
+A	13, 28, 31, 35, 40, 44
+B	00, 01, 09, 20, 39, 43
+
+[로또 발표]
+	01, 02, 12, 13, 21, 35
+
+[내 로또 결과]
+A	13, 28, 31, 35, 40, 44 => 2개 일치
+B	00, 01, 09, 20, 39, 43 => 1개 일치
+```
+
+### 3. 코드
+
+```java
+package Quest07;
+
+import java.util.*;
+
+public class Quest07 {
+
+    public static Scanner sc = new Scanner(System.in);
+
+    public static Integer[] lottoGenerate() {
+
+        // HashSet은 중복값 허용하지 않는다.
+        HashSet set = new HashSet();
+
+        for (int i = 0; set.size() < 6; i++) {
+            int num = (int) (Math.random() * 45) * 1;
+            set.add(num);
+        }
+
+        // 오른차순 정렬
+        LinkedList list = new LinkedList(set);
+        Collections.sort(list);
+
+        // Integer 배열로 변환
+        return (Integer[]) list.toArray(new Integer[0]);
+
+    }
+
+    public static void lottoDisplay() {
+
+        System.out.println("[로또 당첨 프로그램]\n");
+        System.out.print("로또 개수를 입력해 주세요.(숫자 1 ~ 10) : ");
+
+        int num = sc.nextInt();
+        Integer[][] lottoUserArray = new Integer[num][6];
+        Integer[] lottoComputer = lottoGenerate();
+
+        for (int i = 0; i < num; i++) {
+            lottoUserArray[i] = lottoGenerate();
+            System.out.printf("%c\t%02d, %02d, %02d, %02d, %02d, %02d\n", (char) i + 'A', lottoUserArray[i][0], lottoUserArray[i][1], lottoUserArray[i][2], lottoUserArray[i][3], lottoUserArray[i][4], lottoUserArray[i][5]);
+        }
+
+        System.out.println("\n[로또 발표]");
+        System.out.printf("\t%02d, %02d, %02d, %02d, %02d, %02d\n", lottoComputer[0], lottoComputer[1], lottoComputer[2], lottoComputer[3], lottoComputer[4], lottoComputer[5]);
+
+        System.out.println("\n[내 로또 결과]");
+
+        for (int i = 0; i < lottoUserArray.length; i++) {
+            int count = 0;
+            for (Integer j : lottoUserArray[i]) {
+                for (Integer k : lottoComputer) {
+                    if (j == k) {
+                        count++;
+                    }
+                }
+            }
+            System.out.printf("%c\t%02d, %02d, %02d, %02d, %02d, %02d => %d개 일치\n", (char) i + 'A', lottoUserArray[i][0], lottoUserArray[i][1], lottoUserArray[i][2], lottoUserArray[i][3], lottoUserArray[i][4], lottoUserArray[i][5], count);
+            count = 0;
+        }
+    }
+
+
+    public static void main(String[] args) {
+        lottoDisplay();
+    }
+}
+
+```
+
+### 4. 풀이과정
+
+> ❓ **HashSet 스트림을 사용한 이유**
+>
+> HashSet은 중복된 값을 허용하지 않기 때문에 중복값이 있으면 안되는 로또 번호 생성에 적합하다고 생각했다.
+
+---
 
