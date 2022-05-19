@@ -26,7 +26,7 @@
 
 > ⚠ **주의사항**
 >
-> 마크다운의 본질은 글에게 역할을 부여하는 것이다.
+> Markdown의 본질은 글에게 역할을 부여하는 것이다.
 >
 > 글씨의 크기를 키우고 싶다는 이유로 내용에게 제목의 역할을 부여하면 안된다.
 
@@ -71,19 +71,22 @@
 
 4. 코드
 
-	````markdown
-   `inline code`
-   ```python
-   for i in range(10):
-   	print(i)
-   ```
-   ```bash
-   $ touch test.txt
-   ```
-   ```
-   Just plain text
-   ```
-   ````
+  ````markdown
+  `inline code`
+  
+  ```python
+  for i in range(10):
+  	print(i)
+  ```
+  
+  ```bash
+  $ touch test.txt
+  ```
+  
+  ```
+  Just plain text
+  ```
+  ````
 
 5. 링크
 
