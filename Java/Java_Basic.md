@@ -474,7 +474,7 @@ public class Quest07 {
             int count = 0;
             for (Integer j : lottoUserArray[i]) {
                 for (Integer k : lottoComputer) {
-                    if (j == k) {
+                    if (Objects.equals(j, k)) {
                         count++;
                     }
                 }
@@ -497,6 +497,14 @@ public class Quest07 {
 > ❓ **HashSet 스트림을 사용한 이유**
 >
 > HashSet은 중복된 값을 허용하지 않기 때문에 중복값이 있으면 안되는 로또 번호 생성에 적합하다고 생각했다.
+>
+> ❓ **LinkedList를 사용한 이유**
+>
+> HashSet은 순서를 보장하지 않기 때문에 값을 정렬하기 위해서 사용했다.
+>
+> ❓ **Integer 배열을 사용한 이유**
+>
+> LinkedList에서 get으로 값을 받아 쓰는것보다 Integer 배열이 공용으로 쓰기에 적합하다고 생각해 사용했다.
 
 ---
 

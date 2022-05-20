@@ -26,7 +26,7 @@
 
 > ⚠ **주의사항**
 >
-> Markdown의 본질은 글에게 역할을 부여하는 것이다.
+> Markdown의 본질은 글에게 **역할**을 부여하는 것이다.
 >
 > 글씨의 크기를 키우고 싶다는 이유로 내용에게 제목의 역할을 부여하면 안된다.
 
@@ -172,6 +172,17 @@ $ git status
 $ git log --onelist
 ```
 
+### 04) 특수 파일
+
+1. README.md
+   - 프로젝트 대문 설명
+   - **버전관리 시작할 때 바로 만드는 것을 추천**
+2. .gitignore
+   - 추적하지 않을(버전을 만드지 않을) 파일/폴더 설정
+   - 중요한 데이터 파일(개인정보, 유저데이터, Key 등)을 숨김
+   - 이미 commit(추적)한 파일은 무시 ❌ -> **버전관리 시작할 때 바로 만드는 것을 추천**
+   - [gitignore.io](https://www.toptal.com/developers/gitignore/)
+
 ## 03. Github
 
 ---
@@ -184,7 +195,7 @@ $ git log --onelist
 >
 > 프로젝트의 모든 구성원들이 온라인을 통해 소스코드를 효율적으로 관리 할 수 있다.
 
-### 02) 초기설정
+### 02) 초기 설정
 
 > ⚠ **주의사항**
 >
@@ -205,17 +216,53 @@ origin  https://github.com/Username/RepositoryName.git (push)
 $ git remote rm origin
 ```
 
-### 03) 명령어
+### 03) ⭐명령어
+
+#### 01. 송신
 
 ```bash
+##### 송신 (Local => Remote) #####
+# WD -> SA
 $ git add .
+
+# SA -> Local Storge(Commit)
 $ git commit -m "간단한 이유"
 
+# WD -> Remote Storge(Commit)
 $ git push origin master
 
-# -u 옵션을 사용하면, 두 번째 커밋부터는 저장소 이름, 브랜치 이름을 생략 가능
+# -u 옵션을 사용하면
+# 두 번째 커밋부터는 저장소와 브랜치 생략 가능
 $ git push -u origin master
 $ git push
+```
+
+#### 02. 수신 (협업)
+
+```bash
+##### 수신 (Local <= Remote) #####
+# Download(생성) Local X Remote O
+$ git clone https://github.com/username/RepositoryName.git
+
+# Update(수정)
+$ git pull origin master
+
+# 버전이 중복될 때 병합
+# $ git merge
+```
+
+#### 03. 기타
+
+```bash
+#### 기타 ####
+
+# 상태 확인
+$ git status
+$ git log --oneline
+$ git log --oneline --graph --all
+
+# 복구
+$ git reset
 ```
 
 ### 04) 구조
@@ -224,7 +271,129 @@ $ git push
 
 ![이미지 출처: https://sjh836.tistory.com/](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile6.uf.tistory.com%2Fimage%2F237B984B58CE95E90BD98B)
 
-## 04. 
+### 05) 권한 부여
+
+- Settings > Collaborators > Manage access > Add people
+
+### 06) Branch (가지)
+
+- 독립적으로 어떤 작업을 진행하기 위한 개념이다.
+
+![출처 : backlog.com/git-tutorial/kr](https://user-images.githubusercontent.com/105831105/169457261-8c61d302-9ccc-4a06-bdae-c5538e8be2c6.png)
+
+![출처 : backlog.com/git-tutorial/kr](https://user-images.githubusercontent.com/105831105/169457314-7d831a92-1af2-4280-8397-d2f8d697a484.png)
+
+![image](https://user-images.githubusercontent.com/105831105/169465384-412e8c76-28e1-4f1f-9ca1-8b86d6f86dce.png)
+
+ #### 01. 명령어
+
+```bash
+# branch 목록
+$ git branch
+
+# branch 생성
+$ git branch <branchname>
+
+# branch 이동 master => <branchname>
+$ git switch <branchname>
+
+# merge (합병)
+$ git switch master # master로 이동
+$ git merge hotfix	# master ⊃ hotfix 
+
+# branch 삭제
+$ git branch -d hotfix
+```
+
+#### 02. Merge 3가지 상황
+
+1. Fast-Forward (빨리감기)
+   - master버전이 그대로이고, 추가된 branch의 버전이 최신버전일때
+2. Auto-merging (자동합병)
+   - 서로 수정 또는 추가된 파일이 겹치지 않을 때 (**단, 줄이 추가된 것은 겹친 것으로 판단**)
+3. Comflict (충돌)
+   - master와 branch 버전이 추가되고, 다른 작업자가 내가 같은 라인을 수정했을 때
+
+> 🚫 **주의사항**
+>
+> **Git**은 **Commit**을 기준으로 움직이기 때문에 `Switch` 전에 반드시 `Commit`을 하고 이동해야한다.
+
+#### 03. 유용한 기능
+
+- Visual Studio Code -> Git Graph 플러그인
+
+> 🚫 **주의 사항**
+>
+> 1. 왠만하면 Github에서 수정 ❌
+>    - 기본은 Local에서 `push` 하고, Github에서 수정하지 않는다.
+>    - 부득이한 경우 `pull`해서 받아와야 한다.
+> 2. 프로젝트 폴더에 `git init` 설정해야 한다. 
+>    1. 하위 폴더 `git init` ❌
+>    2. 상위 폴더 `git init` ❌
+
+## 04. Pull Request (업데이트 요청)
+
+### 01) Feature Branch Workflow
+
+- Shared repository model ( 저장소의 소유권이 ⭕ )
+
+### 02) Forking Workflow
+
+- Fork & Pull model ( 저장소의 소유권이 ❌ )
+
+- ⁉**Forking Workflow를 사용하는 이유**
+
+  1. 다른 사람이 동시에 작업할 수 있기 때문에
+
+  2. 업로드 권한을 분리하기 위해서
+  3. 내가 만든 새로운 기능 추가를 걔발자에게 제안하기 위해서
+
+#### 01. 구조
+
+![image](https://user-images.githubusercontent.com/105831105/169475375-22bf527f-3a6d-499b-b10e-063e62087f0d.png)
+
+![image](https://user-images.githubusercontent.com/105831105/169480711-238bae46-e0fe-4209-93d8-9549b0176f04.png)
+
+#### 02. 명령어
+
+```bash
+# Github에서 Fork로 Repositories 복제
+
+# origine Remote Storge -> Local Storge
+$ git clone https://github.com/edukyle/kakao_clone.git
+
+# 원본 원격 저장소에 대한 이름은 upstream으로 붙이는 것이 일종의 관례
+$ git remote add upstream https://github.com/AlexKwonPro/kakao_clone.git
+
+# 기능 추가 branch 생성
+$ git switch feature/login
+
+# 기능 구현 후 Local Storge branch<feature/login> -> origine Remote Storge
+# ! origine Local Storge branch<master>에 merge 하지않는다.
+# $ git push origin master X
+$ git push origin feature/login
+
+# Github에서 Pull Request
+```
+
+```bash
+#### 버전 업데이트 ####
+# Pull Request 승인 후 다시 fork
+
+# upstream => Local stroge
+$ git switch master
+
+# 새 버전 upstream -> Local Storge branch<master> pull (Fast-forward)
+$ git pull upstream master
+
+# 합병된 branch<feature/login> 삭제
+$ git branch -d feature/login
+```
 
 ---
 
+## 04. 참고사이트
+
+- [누구나 쉽게 이해할 수 있는 Git 입문](https://backlog.com/git-tutorial/kr/)
+- [Git 특강](https://hphk.notion.site/hphk/Git-22-05-19-22-05-20-AI-18-10bbd9143cef46cf94cc4871b3039e98)
+- [지옥에서 온 Git](https://www.youtube.com/playlist?list=PLuHgQVnccGMA8iwZwrGyNXCGy2LAAsTXk)
