@@ -235,135 +235,27 @@ for (int i = n / 2; i > 0; i--) {
 
 ## 가장 많은 물 담기
 
-### 1. 문제
+> [문제](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_1/src/Practice5.md)
+>
+> [답안](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_1/src/Practice5.java)
+>
+> [정답](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Solution/Java_18_1/src/Practice5.java)
 
-n개의 데이터 height 배열(벽의 높이), 벽의 위치는 고정
-
-어떤 두 벽을 고르면 가장 많은 물을 담을 수 있는지 확인하고 출력
-
-### 2. 입출력 예시
-
-```java
-입력 : 1, 8, 6, 2, 5, 4, 8, 3, 7
-출력 : 49
-    
-입력 : 5, 3, 9, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2
-출력 : 49
-```
-
-### 3. 코드
-
-```java
-public static int solution(int[] height) {        
-        int range = 0, rangeMax = 0;
-
-        for (int i = 0; i < height.length; i++) {
-            for (int j = 0; j < height.length - 1; j++) {
-                
-                if (i == j) {
-                    // 붙은 벽은 Pass
-                    continue;
-                }
-                
-                int wallMin = Math.min(height[i], height[j]);
-                int width = 0;
-                
-                if (i > j){
-                    width = i - j;
-                }else{
-                    width = j - i;
-                }
-                
-                range = wallMin * width;
-                rangeMax = Math.max(rangeMax, range);
-            }
-
-        }
-
-        return rangeMax;
-    }
-```
-
-### 4. 풀이과정
+### 풀이과정
 
 ![KakaoTalk_20220519_225235995](https://user-images.githubusercontent.com/105831105/169312459-d075fa31-cb24-42d7-9bae-e1e9b4030651.jpg)
-
-### 5. 정답
-
-```java
-public static int solution(int[] height) {
-    int left = 0;
-    int right = height.length - 1;
-    int maxArea = 0;
-
-    while (left < right) {
-        // # 1
-        int x = (right - left);
-        int y = height[left] < height[right] ? height[left] : height[right];
-        int curArea = x * y;
-        maxArea = maxArea > curArea ? maxArea : curArea;
-
-        // # 2
-        // curArea = (right - left) * Math.min(height[left], height[right]);
-        // maxArea = Math.max(maxArea, curArea);
-
-        if (height[left] < height[right]) {
-            left++;
-        } else {
-            right--;
-        }
-    }
-
-    return maxArea;
-}
-```
 
 ---
 
 ## 로마자를 정수형으로 변환
 
+> [문제](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_2/src/Practice1.md)
+>
 > [답안](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_2/src/Practice1.java)
 >
 > [정답](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Solution/Java_18_2/src/Practice1.java)
 
-### 1. 문제
-
-로마 숫자 표기를 정수형으로 변환하는 프로그램을 작성하세요.
-
-로마 숫자 표기법은 I, V, X, L, C, D, M 으로 이루어져있다.
-
-|로마 숫자|정수형|
-|---|---|
-|I|1|
-|V|5|
-|X|10|
-|L|50|
-|C|100|
-|D|500|
-|M|1000|
-
-
-로마 숫자 표기 방식
-* 큰 기호에서 작은 기호 방향으로 작성 (XI, VI, II, ...)
-* 다음의 경우 작은 기호가 큰 기호 앞에 올 수 있다.
-  * I 는 V 와 X 의 앞에 올 수 있다. (IV: 4, IX: 9)
-  * X 는 L 과 C 의 앞에 올 수 있다. (XL: 40, XC: 90)
-  * C 는 D 와 M 의 앞에 올 수 있다. (CD: 400, CM: 900)
-  
-    
-
-입출력 예시
-
-|입력|출력|
-|---|---|
-|"III"|3|
-|"IV"|4|
-|"VI"|6|
-|"XIII"|13|
-|"XXVI"|26|
-|"MCMXCIV"|1994|
-
-### 2. 풀이
+### 풀이
 
 
 
@@ -371,46 +263,13 @@ public static int solution(int[] height) {
 
 ## 정수형을 로마자로 변환
 
+> [문제](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_2/src/Practice2.md)
+>
 > [답안](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_2/src/Practice2.java)
 >
 > [정답](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Solution/Java_18_2/src/Practice1.java)
 
-### 1. 문제
-
-정수형 숫자를 로마 숫자 표기로 변환하는 프로그램을 작성하세요.
-
-로마 숫자 표기법은 I, V, X, L, C, D, M 으로 이루어져있다.
-
-|로마 숫자|정수형|
-|---|---|
-|I|1|
-|V|5|
-|X|10|
-|L|50|
-|C|100|
-|D|500|
-|M|1000|
-
-
-로마 숫자 표기 방식
-* 큰 기호에서 작은 기호 방향으로 작성 (XI, VI, II, ...)
-* 다음의 경우 작은 기호가 큰 기호 앞에 올 수 있다.
-    * I 는 V 와 X 의 앞에 올 수 있다. (IV: 4, IX: 9)
-    * X 는 L 과 C 의 앞에 올 수 있다. (XL: 40, XC: 90)
-    * C 는 D 와 M 의 앞에 올 수 있다. (CD: 400, CM: 900)
-
-**입출력 예시**
-
-|입력|출력|
-|---|---|
-|3|"III"|
-|4|"IV"|
-|6|"VI"|
-|13|"XIII"|
-|26|"XXVI"|
-|1994|"MCMXCIV"|
-
-### 2. 풀이
+### 풀이
 
 
 
@@ -418,38 +277,13 @@ public static int solution(int[] height) {
 
 ## 간단한 편집기
 
+> [문제](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_2/src/Practice3.md)
+>
 > [답안](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Practice/Java_18_2/src/Practice3.java)
 >
 > [정답](https://github.com/seoli0179/ZeroBaseJava/blob/master/JavaBasic/src/Solution/Java_18_2/src/Practice3.java)
 
-### 1. 문제
-
-간단한 편집기를 구현하려고 한다.
-
-편집기에는 문자열과 편집 명령어가 주어지는데, 명령어의 동작은 다음과 같다.
-- L : 커서를 왼쪽으로 한 칸 옮김 (커서가 문장의 맨 앞이면 무시)
-- D	: 커서를 오른쪽으로 한 칸 옮김 (커서가 문장의 맨 뒤이면 무시)
-- B	: 커서 왼쪽에 있는 문자를 삭제 (커서가 문장의 맨 앞이면 무시)
-- P x : x라는 문자를 커서 왼쪽에 추가
-
-여기서 커서는 문자열에서 편집이 시작되는 기준 위치로,  
-문장의 맨 앞, 맨 뒤, 중간에 위치할 수 있다.
-
-편집기에 문자열과 명령어들이 주어졌을 때,  
-편집을 완료한 후의 문자열을 출력하는 프로그램을 작성하시오.  
-(초기 커서의 위치는 문장의 맨 뒤에서 시작한다.)  
-(문자열은 소문자만 입력 가능하다.)
-
-**입출력 예시**
-
-|초기 문자열|명령어|결과 출력|
-|---|---|---|
-|"aba"|"L B"|"aa"|
-|"abcd"|"P x L P y"|"abcdyx"|
-|"abc"|"L L L P x L B P y"|"yxabc"|
-|"a"|"B B L L D D P a P b P c"|"abc"|
-
-### 2. 풀이
+### 풀이
 
 
 
