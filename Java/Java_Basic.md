@@ -508,3 +508,69 @@ public class Quest07 {
 
 ---
 
+## 과세금액 계산 프로그램
+
+### 0. 코드
+
+```java
+package Quest08;
+
+import java.util.Scanner;
+
+public class Quest08 {
+
+    static Scanner sc = new Scanner(System.in);
+
+    // 누진공제
+    static final long[] progressiveTaxData = {0, 1080000, 5220000, 14900000, 19400000, 25400000, 35400000, 65400000};
+
+    // 과세 표준
+    static final long[] TaxData1 = {0, 12000000, 46000000, 88000000, 150000000, 300000000, 500000000, 1000000000};
+    static final long[] TaxData2 = {0, 12000000, 34000000, 42000000, 62000000, 150000000, 200000000, 500000000, 1000000000};
+
+    // 세율
+    static final double[] TaxRateData = {0.06, 0.15, 0.24, 0.35, 0.38, 0.4, 0.42, 0.45};
+
+    public static void taxCalculatorDisplay() {
+
+        System.out.println("[과세금액 계산 프로그램]");
+        System.out.print("연소득을 입력해 주세요 : ");
+
+        // 연소득 금액
+        long salaryAnnual = sc.nextLong();
+        long salaryAnnualTemp = salaryAnnual;
+
+        long tax;                   // 각 세율의 세금 계산
+        long tax_sum = 0;           // 총 세금 계산
+        long ProgressiveTax = 0;    // 누진 공세
+
+        for (int i = 0; i < TaxData1.length; i++) {
+            if (salaryAnnual > TaxData1[i] || (i == 0 && salaryAnnual >= 0)) {
+
+                salaryAnnualTemp -= TaxData2[i];
+
+                // 세율계산
+                tax = (i == TaxData1.length - 1) ? (long) (salaryAnnualTemp * TaxRateData[i]) : (long) ((Math.min(salaryAnnualTemp, TaxData2[i + 1])) * TaxRateData[i]);
+                tax_sum += tax;
+
+                // 누진공제계산
+                ProgressiveTax = (i == 0) ? 0L : (long) ((salaryAnnual * TaxRateData[i]) - progressiveTaxData[i]);
+
+                System.out.printf("%10d * %2d%% = \t%10d\n", (i == TaxData1.length - 1) ? salaryAnnualTemp : Math.min(salaryAnnualTemp, TaxData2[i + 1]), (int) (TaxRateData[i] * 100), tax);
+            }
+        }
+
+
+        System.out.printf("\n[세율에 위한 세금] : \t\t\t%10d\n", tax_sum);
+        System.out.printf("[누진공제 계산에 의한 세금] : \t%10d", ProgressiveTax);
+
+    }
+
+    public static void main(String[] args) {
+
+        taxCalculatorDisplay();
+        sc.close();
+    }
+}
+```
+
