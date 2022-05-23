@@ -56,39 +56,11 @@ System.out.println("0b" + Integer.toBinaryString(0b1111));	// 2진수
 System.out.println("0" + Integer.toOctalString(014));		// 8진수
 System.out.println("0x" + Integer.toHexString(0x1a));		// 16진수
 ```
+### 참조 타입
 
----
+![image](https://user-images.githubusercontent.com/105831105/169726238-cb70c585-dffa-4405-bf91-b6a8764819fe.png)
 
-## 02.제어문
-
-### 1. if 문
-
-
-
-### 4. for 문
-
-#### 1. 기본 for문
-
-```java
-for (int i = 0; i < 5; i++) {
-    System.out.println(i);
-}
-```
-
-#### 2. 향상된 for문
-
-```java
-int[] intArr = {1, 2, 3};
-for (int i : intArr) {
-    System.out.println(i);
-}
-```
-
----
-
-## 03. 참조 타입
-
-### 배열
+#### 배열
 
 - 일반 초기화
 
@@ -118,7 +90,7 @@ int[] newArr2 = Arrays.copyOf(oldArr, oldArr.length);	// Arrays 클래스
 int[] newArr3 = oldArr.clone();
 ```
 
-### String  타입
+#### String  타입
 
 ```java
 String[] strArr = new String[3];
@@ -132,7 +104,7 @@ System.out.println(strArr[1] == strArr[2]);			// false (문자열 == 는 객체 
 System.out.println(strArr[1].equals(strArr[2]));	// true (문자열 비교는 equals을 사용)
 ```
 
-### 열거 타입
+#### 열거 타입
 
 > **상수집합 / 열거란**
 >
@@ -141,6 +113,9 @@ System.out.println(strArr[1].equals(strArr[2]));	// true (문자열 비교는 eq
 > 매직넘버(1과 같은 숫자 상수값)를 사용할 때보다 코드가 명확해 진다.
 >
 > - 프로그래밍에서 상수로 선언하지 않은 숫자를 매직넘버라고 한다.
+>
+
+> **열거타입을 사용하는 이유?**
 >
 > 잘못된 값을 사용함으로 인해 발생할수 있는 위험성이 사라진다.
 
@@ -198,6 +173,452 @@ public class Main {
     }
 }
 ```
+---
+
+## 02.제어문
+
+### 2. switch 문
+
+```java
+int input = 2;
+switch (input) {
+    case 1:
+        System.out.println(1);
+        break;
+    case 2:
+        System.out.println(2);
+        break;
+    default:
+        System.out.println("default");
+}
+```
+
+### 3. while 문
+
+```java
+Outer:
+while (true) {
+    break Outer;
+}
+```
+
+### 4. for 문
+
+#### 1. 기본 for문
+
+```java
+for (int i = 0; i < 5; i++) {
+    System.out.println(i);
+}
+```
+
+#### 2. 향상된 for문
+
+```java
+int[] intArr = {1, 2, 3};
+for (int i : intArr) {
+    System.out.println(i);
+}
+```
+
+
+
+
+---
+
+## 04. 객체 지향
+
+### 클래스
+
+```java
+public class Worker {
+    private String JoominNo, name;
+
+    public Worker(String joominNo, String name) {
+        JoominNo = joominNo;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "주민번호 : " + JoominNo + '\n' +
+                "성명 : " + name + '\n';
+    }
+}
+
+public class PartTime extends Worker {
+
+    private int hours, uniPrice;
+
+    public PartTime(String joominNo, String name, int hours, int uniPrice) {
+        super(joominNo, name);
+        this.hours = hours;
+        this.uniPrice = uniPrice;
+    }
+
+    public int calculatePay(){
+        return uniPrice * hours;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "시급 : " + uniPrice + " 원\n" +
+                "근무시간 : " + hours + " 시간\n" +
+                "총지불액 : " + calculatePay() + " 원\n";
+    }
+}
+
+public class WorkerPartTimeMain {
+    public static void main(String[] args) {
+        PartTime pt = new PartTime("990101-1034567", "홍길동", 60, 6000);
+        System.out.println(pt); // == System.out.println(pt.toString());
+    }
+}
+```
+
+---
+
+### 접근 제한자
+
+![image](https://user-images.githubusercontent.com/105831105/169733857-5519ee84-8c8f-4ebf-9172-a50501495267.png)
+
+![image](https://user-images.githubusercontent.com/105831105/169733923-14cad5f6-eff2-42bc-995f-9010eeaffbd4.png)
+
+---
+
+### 상속
+
+> **상속이란?**
+>
+> 자식 클래스가 부모 클래스의 기능을 그대로 물려받을 수 있는 기능
+>
+> private 필드와 메소드 제외, 다른 패키지면 default 필드와 메소드도 제외
+>
+> 자바는 다중 상속을 지원하지 않는다.
+
+```java
+class Animal {
+    String name;
+
+    void setName(String name) {
+        this.name = name;
+    }
+}
+
+class Dog extends Animal {
+}
+
+public class Sample {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.setName("poppy");
+        System.out.println(dog.name);  // poppy 출력
+    }
+}
+```
+
+- 기능 확장
+  - 메소드 추가 / 필드 추가
+
+```java
+class Animal {
+    String name;
+
+    void setName(String name) {
+        this.name = name;
+    }
+}
+
+class Dog extends Animal {
+    String old;	// 필드 추가
+    
+    void sleep() {
+        System.out.println(this.name+" zzz");	// 메소드 추가
+    }
+}
+
+public class Sample {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.setName("poppy");
+        System.out.println(dog.name);  // poppy 출력
+        dog.sleep();  // poppy zzz 출력
+    }
+}
+```
+
+- 생성자
+  - 생성자 호출은 **맨 첫줄**에 와야함
+
+
+![image](https://user-images.githubusercontent.com/105831105/169724098-23ca7603-7cf8-4cb3-8fee-aa485e330c53.png)
+
+- IS-A Vs HAS-A 관계
+
+> "Dog `is a` Animal" 과 같이 말할 수 있는 관계를 **IS-A 관계**라고 한다. (상속)
+>
+> - **상속을 코드 재사용의 개념으로 이해하면 안된다.** 
+>
+> "Computer has a CPU" 와 같이 말할 수 있는 관계룰 **HAS-A 관계**라고 한다. (인터페이스)
+
+```java
+Animal dog = new Dog();  // Dog is a Animal
+Dog dog = new Animal();  // 컴파일 오류: 부모 클래스로 만든 객체는 자식 클래스의 자료형으로 사용할 수 없다.
+```
+
+![IS-A](https://user-images.githubusercontent.com/105831105/169725208-aa3b9194-44f5-4c44-8980-dd7f1764354a.png)
+
+![image](https://user-images.githubusercontent.com/105831105/169725236-4107230b-81ce-4cc6-bde3-97bd4991048d.png)
+
+- 메소드 오버라이딩 (Method overriding)과 오버로딩
+
+```java
+class Animal {
+    String name;
+
+    void setName(String name) {
+        this.name = name;
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sleep() {
+        System.out.println(this.name + " zzz");
+    }
+}
+
+class HouseDog extends Dog {
+    @Override
+    void sleep() {
+        System.out.println(this.name + " zzz in house");
+    }
+    
+    //메소드 오버로딩(method overloading) : 동일한 이름 / 다른 입력
+    void sleep(int hour) {
+        System.out.println(this.name + " zzz in house for " + hour + " hours");
+    }
+}
+
+public class Sample {
+    public static void main(String[] args) {
+        HouseDog houseDog = new HouseDog();
+        houseDog.setName("happy");
+        houseDog.sleep();  // happy zzz in house 출력
+    }
+}
+```
+
+
+
+---
+
+### 인터페이스
+
+> **인터페이스란**
+>
+> 동일한 목적 하에 동일한 기능을 수행하게끔 강제하는 것
+
+> **상속과 인터페이스**
+>
+> 상속은 자식 클래스가 부모 클래스의 메소드를 오버라이딩하지 않고 사용할 수 있다.
+>
+> 인터페이스는 인터페이스의 메소드를 반드시 구현해야 하는 **강제성**을 갖는다
+
+> ⚠ **클래스와 인터페이스는 .java 파일을 따로 만드는 것이 일반적이다.**
+
+```java
+interface Tire {
+    public void roll();
+}
+
+class ATire implements Tire {
+    // 반드시 Override 해야함!
+    @Override
+    public void roll() {
+        System.out.println("ATire.roll()");
+    }
+}
+```
+
+---
+
+### 다형성(Polymorphism)
+
+> **다형성 이란?**
+>
+> 하나의 객체가 여러개의 자료형 타입을 가질 수 있는 것
+
+```java
+interface Predator {
+    (... 생략 ...)
+}
+
+interface Barkable {
+    void bark();
+}
+
+class Animal {
+    (... 생략 ...)
+}
+
+class Tiger extends Animal implements Predator, Barkable {
+    public String getFood() {
+        return "apple";
+    }
+
+    public void bark() {
+        System.out.println("어흥");
+    }
+}
+
+class Lion extends Animal implements Predator, Barkable {
+    public String getFood() {
+        return "banana";
+    }
+
+    public void bark() {
+        System.out.println("으르렁");
+    }
+}
+
+class ZooKeeper {
+    (... 생략 ...)
+}
+
+class Bouncer {
+    void barkAnimal(Barkable animal) {  // Animal 대신 Barkable을 사용
+        animal.bark();
+        /*
+        if (animal instanceof Tiger) {
+            System.out.println("어흥");
+        } else if (animal instanceof Lion) {
+            System.out.println("으르렁");
+        }
+        */
+    }
+}
+
+public class Sample {
+    public static void main(String[] args) {
+        Tiger tiger = new Tiger();  // Tiger is a Tiger
+        Animal animal = new Tiger();  // Tiger is a Animal
+        Predator predator = new Tiger();  // Tiger is a Predator
+        Barkable barkable = new Tiger();  // Tiger is a Barkable
+        
+        Lion lion = new Lion();
+
+        Bouncer bouncer = new Bouncer();
+        bouncer.barkAnimal(tiger);
+        bouncer.barkAnimal(lion);
+        
+    }
+}
+```
+
+```java
+class A {
+    public void x() {
+        System.out.println("class A.x()");
+    }
+}
+
+class B extends A {
+    @Override
+    public void x() {
+        System.out.println("class B.x()");
+    }
+
+    public void y() {
+        System.out.println("class B.y()");
+    }
+}
+
+public class test {
+    public static void main(String[] args) {
+
+        B b = new B();
+        b.x();	// class B.x()
+        b.y();	// class B.y()
+
+        A a = new B();
+        a.x();
+        
+        // 컴파일 에러!
+        // 부모클래스에 자식클래스를 생성할 수 있지만, 부모클래스에 없는 기능은 사용하지 못한다.
+        // a.y();	
+
+    }
+}
+```
+
+```java
+interface Tire {
+    public void roll();
+}
+
+class ATire implements Tire {
+    @Override
+    public void roll() {
+        System.out.println("ATire.roll()");
+    }
+}
+
+class BTire implements Tire {
+    @Override
+    public void roll() {
+        System.out.println("BTire.roll()");
+    }
+}
+
+class Car {
+    Tire[] tires = {
+            new ATire(),
+            new ATire(),
+            new BTire(),
+            new BTire()
+    };
+
+    public void run() {
+        for (Tire i : tires) {
+            i.roll();
+        }
+    }
+}
+
+public class test {
+
+    public static void main(String[] args) {
+
+        Car car = new Car();
+        car.run();
+
+    }
+}
+```
+
+
+
+---
+
+### 추상 클래스
+
+> **추상클래스(Abstract Class)란?**
+>
+> 인터페이스의 역할도 하면서 클래스의 기능도 가지고 있는 자바의 돌연변이 같은 클래스
+>
+> 일반 클래스와는 달리 단독으로 객체를 생성할 수 없다. 
+>
+> 반드시 추상 클래스를 상속한 실제 클래스를 통해서만 객체를 생성할 수 있다.
+
+> **인터페이스와 추상 클래스의 차이**
+>
+> 인터페이스와는 달리 일반 클래스처럼 객체변수, 생성자, private 메서드 등을 가질 수 있다.
+
+---
+
+### 내부 클래스
 
 
 
@@ -205,11 +626,7 @@ public class Main {
 
 ## 05. 기본 API
 
-### String 
-
-
-
-### StringBuffer
+### String
 
 - String
 
@@ -258,33 +675,7 @@ String result = sb.toString();
 System.out.println(result);
 ```
 
-## 
-
----
-
-## 06. 클래스
-
----
-
-## 07. 상속
-
----
-
-## 08. 다형성
-
----
-
-## 09. 추상 클래스
-
----
-
-## 10. 인터페이스
-
----
-
-## 11. 내부 클래스
-
----
+----
 
 ## 12. 입출력
 
