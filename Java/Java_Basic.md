@@ -390,12 +390,13 @@ class Dog extends Animal {
 }
 
 class HouseDog extends Dog {
+    // 메소드 오버라이딩
     @Override
     void sleep() {
         System.out.println(this.name + " zzz in house");
     }
     
-    //메소드 오버로딩(method overloading) : 동일한 이름 / 다른 입력
+    // 메소드 오버로딩(method overloading) : 동일한 이름 / 다른 입력
     void sleep(int hour) {
         System.out.println(this.name + " zzz in house for " + hour + " hours");
     }
@@ -410,6 +411,14 @@ public class Sample {
 }
 ```
 
+- 자동/강제 형변환
+
+```java
+Parent p = new Child(); // 자동
+Child c = (Child)p;		// 강제
+//Child c1 = (Child)new Parent(); //에러!
+```
+
 
 
 ---
@@ -422,15 +431,27 @@ public class Sample {
 
 > **상속과 인터페이스**
 >
-> 상속은 자식 클래스가 부모 클래스의 메소드를 오버라이딩하지 않고 사용할 수 있다.
+> **상속**은 자식 클래스가 부모 클래스의 메소드를 오버라이딩하지 않고 사용할 수 있다.
 >
-> 인터페이스는 인터페이스의 메소드를 반드시 구현해야 하는 **강제성**을 갖는다
+> **인터페이스**는 인터페이스의 메소드를 반드시 구현해야 하는 **강제성**을 갖는다
 
 > ⚠ **클래스와 인터페이스는 .java 파일을 따로 만드는 것이 일반적이다.**
 
+![image](https://user-images.githubusercontent.com/105831105/169956028-6562c331-5104-4a95-8b70-c026507e4156.png)
+
+![image](https://user-images.githubusercontent.com/105831105/169956111-bc333487-373d-4979-bff0-7396072a0cd3.png)
+
 ```java
 interface Tire {
-    public void roll();
+    
+    int finalValue = 0;	// public, static, final 생략 가능
+    void roll();	// public, static, final 생략 가능, 필수 Overridding
+    
+    //default 메소드 : 실행블럭 가질 수 있음, Override 필수 아님
+    default void run(){	
+        System.out.println("Hello World!");
+    }
+    
 }
 
 class ATire implements Tire {
@@ -438,6 +459,15 @@ class ATire implements Tire {
     @Override
     public void roll() {
         System.out.println("ATire.roll()");
+    }
+}
+
+public class main  {
+    public static void main(String[] args) {
+        ATire b = new ATire();
+        b.roll();
+        b.run();
+        System.out.println(Tire.finalValue);
     }
 }
 ```
@@ -490,14 +520,14 @@ class ZooKeeper {
 class Bouncer {
     void barkAnimal(Barkable animal) {  // Animal 대신 Barkable을 사용
         animal.bark();
-        /*
-        if (animal instanceof Tiger) {
-            System.out.println("어흥");
-        } else if (animal instanceof Lion) {
-            System.out.println("으르렁");
-        }
-        */
     }
+    /*
+    if (animal instanceof Tiger) {
+    	System.out.println("어흥");
+    } else if (animal instanceof Lion) {
+        System.out.println("으르렁");
+    }
+    */  
 }
 
 public class Sample {
@@ -539,6 +569,8 @@ public class test {
     public static void main(String[] args) {
 
         B b = new B();
+        //B b1 = new A(); 에러!
+        
         b.x();	// class B.x()
         b.y();	// class B.y()
 
@@ -598,6 +630,41 @@ public class test {
 }
 ```
 
+```java
+public interface Vehicle {
+    void run();
+}
+public class Bus implements Vehicle{
+    @Override
+    public void run() {
+        System.out.println("버스가 달립니다.");
+    }
+}
+public class Taxi implements Vehicle{
+    @Override
+    public void run() {
+        System.out.println("택시가 달립니다.");
+    }
+}
+public class Driver {
+    void drive(Vehicle vehicle){
+        vehicle.run();
+    }
+}
+public class DriverEx {
+    public static void main(String[] args) {
+        Driver driver = new Driver();
+        Bus bus = new Bus();
+        Taxi taxi = new Taxi();
+
+        driver.drive(bus);
+        driver.drive(taxi);
+
+    }
+}
+
+```
+
 
 
 ---
@@ -608,13 +675,44 @@ public class test {
 >
 > 인터페이스의 역할도 하면서 클래스의 기능도 가지고 있는 자바의 돌연변이 같은 클래스
 >
-> 일반 클래스와는 달리 단독으로 객체를 생성할 수 없다. 
+> 일반 클래스와는 달리 단독으로 객체를 생성할 수 없고, 반드시 추상 클래스를 상속한 실제 클래스를 통해서만 객체를 생성할 수 있다.
 >
-> 반드시 추상 클래스를 상속한 실제 클래스를 통해서만 객체를 생성할 수 있다.
+> **필드와 메서드 이름을 통일하여 유지보수성을 높이고 통일성을 유지**할 수 있다.
 
 > **인터페이스와 추상 클래스의 차이**
 >
 > 인터페이스와는 달리 일반 클래스처럼 객체변수, 생성자, private 메서드 등을 가질 수 있다.
+
+![image](https://user-images.githubusercontent.com/105831105/169930041-2bf69970-0d8b-41bc-9682-e18d0294c7a1.png)
+
+```java
+public abstract class Bird{
+    public abstract void sing();
+
+    public void fly(){
+        System.out.println("날다.");
+    }
+}
+
+public class Duck extends Bird{
+    @Override
+    public void sing() {
+        System.out.println("꽥꽥!!");
+    }
+}
+
+public class DuckExam { 
+    public static void main(String[] args) {
+        Duck duck = new Duck();
+        duck.sing();
+        duck.fly();
+
+        //Bird b = new Bird(); 객체 생성 불가!
+    }   
+}
+```
+
+
 
 ---
 
