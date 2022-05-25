@@ -437,9 +437,11 @@ Child c = (Child)p;		// 강제
 
 > ⚠ **클래스와 인터페이스는 .java 파일을 따로 만드는 것이 일반적이다.**
 
-![image](https://user-images.githubusercontent.com/105831105/169956028-6562c331-5104-4a95-8b70-c026507e4156.png)
+![image](https://user-images.githubusercontent.com/105831105/170155503-87d02392-9df5-49d9-a726-8ca14502ffe9.png)
 
-![image](https://user-images.githubusercontent.com/105831105/169956111-bc333487-373d-4979-bff0-7396072a0cd3.png)
+![image](https://user-images.githubusercontent.com/105831105/170155560-b3286df3-f226-4888-a5c9-7443e0ae7950.png)
+
+![image](https://user-images.githubusercontent.com/105831105/170155597-7d0471c0-5510-4fbe-92fa-dffd2301d715.png)
 
 ```java
 interface Tire {
@@ -479,111 +481,6 @@ public class main  {
 > **다형성 이란?**
 >
 > 하나의 객체가 여러개의 자료형 타입을 가질 수 있는 것
-
-```java
-interface Predator {
-    (... 생략 ...)
-}
-
-interface Barkable {
-    void bark();
-}
-
-class Animal {
-    (... 생략 ...)
-}
-
-class Tiger extends Animal implements Predator, Barkable {
-    public String getFood() {
-        return "apple";
-    }
-
-    public void bark() {
-        System.out.println("어흥");
-    }
-}
-
-class Lion extends Animal implements Predator, Barkable {
-    public String getFood() {
-        return "banana";
-    }
-
-    public void bark() {
-        System.out.println("으르렁");
-    }
-}
-
-class ZooKeeper {
-    (... 생략 ...)
-}
-
-class Bouncer {
-    void barkAnimal(Barkable animal) {  // Animal 대신 Barkable을 사용
-        animal.bark();
-    }
-    /*
-    if (animal instanceof Tiger) {
-    	System.out.println("어흥");
-    } else if (animal instanceof Lion) {
-        System.out.println("으르렁");
-    }
-    */  
-}
-
-public class Sample {
-    public static void main(String[] args) {
-        Tiger tiger = new Tiger();  // Tiger is a Tiger
-        Animal animal = new Tiger();  // Tiger is a Animal
-        Predator predator = new Tiger();  // Tiger is a Predator
-        Barkable barkable = new Tiger();  // Tiger is a Barkable
-        
-        Lion lion = new Lion();
-
-        Bouncer bouncer = new Bouncer();
-        bouncer.barkAnimal(tiger);
-        bouncer.barkAnimal(lion);
-        
-    }
-}
-```
-
-```java
-class A {
-    public void x() {
-        System.out.println("class A.x()");
-    }
-}
-
-class B extends A {
-    @Override
-    public void x() {
-        System.out.println("class B.x()");
-    }
-
-    public void y() {
-        System.out.println("class B.y()");
-    }
-}
-
-public class test {
-    public static void main(String[] args) {
-
-        B b = new B();
-        //B b1 = new A(); 에러!
-        
-        b.x();	// class B.x()
-        b.y();	// class B.y()
-
-        A a = new B();
-        a.x();
-        
-        // 컴파일 에러!
-        // 부모클래스에 자식클래스를 생성할 수 있지만, 부모클래스에 없는 기능은 사용하지 못한다.
-        // a.y();	
-
-    }
-}
-```
 
 ```java
 interface Tire {
@@ -631,6 +528,7 @@ public class test {
 ```
 
 ```java
+// 자동 형변환
 public interface Vehicle {
     void run();
 }
@@ -657,8 +555,57 @@ public class DriverEx {
         Bus bus = new Bus();
         Taxi taxi = new Taxi();
 
-        driver.drive(bus);
-        driver.drive(taxi);
+        driver.drive(bus);	// 자동 타입 변환
+        driver.drive(taxi);	// 자동 타입 변환
+
+    }
+}
+
+```
+
+```java
+// 강제 형변환
+public interface Vehicle {
+    void run();
+}
+public class Driver {
+    public void drive(Vehicle vehicle){
+        if(vehicle instanceof Bus){
+            Bus bus = (Bus)vehicle;
+            bus.check();
+        }
+    }
+}
+public class Bus implements Vehicle{
+    @Override
+    public void run() {
+        System.out.println("버스가 달립니다.");
+    }
+    public void check() {
+        
+    }
+}
+public class DriverEx {
+    public static void main(String[] args) {
+        Vehicle vehicle = new Bus();	// 자동 타입 변환
+        Driver driver = new Driver();
+        
+        vehicle.run();
+//        vehicle.check(); 에러! Vehicle 인터페이스에는 check() 없음
+
+        Bus bus = (Bus)vehicle;	// 강제 타입 변환
+        
+        bus.run();
+        bus.check();
+        
+        driver(vehicle);	// 객체 타입 확인 후 강제변환
+        
+        Vehicle v = new Vehicle() {	// 익명 구형 객체 (일회성)
+            @Override
+            public void run() {
+                
+            }
+        };
 
     }
 }
@@ -716,7 +663,226 @@ public class DuckExam {
 
 ---
 
-### 내부 클래스
+### 내부 클래스(중첩 클래스)
+
+- Class in Class
+- Method in Class
+- 매개변수 in Class 
+
+```java
+class OutClass {
+    class InClass { //내부 인스턴스 멤버 클래스
+        InClass() {}
+        int filed1;
+        //        static int filed2; 정적 필드 X
+        void method1() {
+            class LocalClass{ // 로컬 클래스
+                int filed3;
+//                static int filed4; 정적 필드 X
+                void methode3(){}
+//                static void method4(){} 정적 메소드 X
+            }
+            LocalClass localClass = new LocalClass();
+            localClass.filed3 = 1;
+            localClass.methode3();
+        }
+//        static void method2(){} 정적 메소드 X
+    }
+
+    static class InClassStatic { // 내부 정적 멤버 클래스
+        InClassStatic() {}
+        int filed1;
+        static int filed2;
+        void method1() {}
+        static void method2() {}
+    }
+
+    interface Ininterface { // 중첩 인터페이스
+        public void onClick();
+    }
+    
+}
+
+public class Main {
+    public static void main(String[] args) {
+        OutClass outClass = new OutClass();
+        OutClass.InClass inClass = outClass.new InClass();
+//        OutClass.InClass = new OutClass.InClass(); 에러!
+        OutClass.InClassStatic inClassStatic = new OutClass.InClassStatic();
+        OutClass.Ininterface ininterface = new OutClass.Ininterface() {
+            @Override
+            public void onClick() {}
+        };
+
+        inClass.filed1 = 1;
+        inClass.method1();
+
+        inClassStatic.filed1 = 2;
+        OutClass.InClassStatic.filed2 = 3;
+        inClass.method1();
+        OutClass.InClassStatic.method2();
+    }
+}
+
+```
+
+```java
+class OutClass {
+
+    int field1;
+    void method1(){}
+    static int field2;
+    static void method2(){}
+    class InClass{
+        void method(){
+            field1 = 1;
+            method1();
+            
+            field2 = 1;
+            method2();
+        }
+    }
+    static class InStaticClass{
+        void method(){
+//            field1 = 1;
+//            method1();
+            field2 = 1;
+            method2();
+        }
+    }
+
+}
+```
+
+```java
+class OutClass {
+    void method(final int arg1, int arg2){
+        final int var1 = 1;
+        int var2 = 2;
+        class LocalClass{ 
+// 로컬 클래스에서 "사용된" 매개변수와 로컬변수는 final의 특성을 갖는다.
+// 매개변수나 로컬변수가 수정되어 값이 변경되면, 
+// 로컬클래스에 복사해 둔 값과 달라지는 문제를 해결하기 위해서이다.
+            int method(){
+//                var2 = 1;	
+//                arg2 = 1;	
+                return arg1 + arg2 + var1 + var2;
+            }
+        }
+//        var2 = 3;
+//        arg2 = 2;
+    }
+}
+```
+
+```java
+class OutClass {
+    int a = 1;
+    void method(){
+        System.out.println("OutClass");
+    };
+    class InClass{
+        int a = 0;
+        void method(){
+            System.out.println("InClass");
+        };
+        void print(){
+            int a = 1;
+            
+            a = 2;				 	//InClass.print() a / print안에 생성 안했다면 Inclass.a
+            this.a = 2; 			//Inclass.a
+            OutClass.this.a = 2;   	 //OutClass.a
+
+            method();				//InClass.method()
+            this.method();			//InClass.method()
+            OutClass.this.method();	 //OutClass.method()
+        }
+    }
+    
+    class A {}
+    static class B {}
+    
+    A a = new A();
+    B b = new B();
+//    static A c = new A(); 에러!
+    static B d = new B();
+    
+    void method1(){
+        A a = new A();
+        B b = new B();
+    }
+    static void method2(){
+//        A a = new A(); 에러!
+        B b = new B();
+    }
+    
+}
+
+public class Test {
+    public static void main(String[] args) {
+        OutClass outClass = new OutClass();
+        OutClass.InClass inClass = outClass.new InClass();
+        inClass.print();
+    }
+}
+
+```
+
+```java
+
+// 익명 자식 객체 만들기
+interface Person { //class도 가능
+    public void wake();
+}
+class A {
+    Person filed = new Person() {
+        @Override
+        public void wake() {
+            System.out.println("6시에 일어납니다.");
+            work();
+        }
+        public void work() {
+            System.out.println("출근합니다.");
+        }
+    };
+    void method1() {
+        Person localVar = new Person() {
+            @Override
+            public void wake() {
+                System.out.println("7시에 일어납니다.");
+                walk();
+            }
+            public void walk() {
+                System.out.println("산책합니다.");
+            }
+        };
+        localVar.wake();
+    }
+    void method2(Person person) {
+        person.wake();
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        A a = new A();
+        a.filed.wake();
+        a.method1();
+        a.method2(new Person() {
+            @Override
+            public void wake() {
+                System.out.println("8시에 일어납니다.");
+                study();
+            }
+            public void study() {
+                System.out.println("공부합니다.");
+            }
+        });
+    }
+}
+
+```
+
+
 
 
 
