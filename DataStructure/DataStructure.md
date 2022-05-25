@@ -320,6 +320,153 @@ public int getLCM(int numA, int numB){
 }
 ```
 
+---
+
+### 03. 순열
+
+#### 팩토리얼
+
+> 1에서 n까지의 모든 자연수의 곱 (n!)
+
+![image](https://user-images.githubusercontent.com/105831105/170264466-3307f04e-7535-4fa3-a69f-50b62ef542b4.png)
+
+```java
+// 팩토리얼
+int n = 5;
+int result = 1;
+for (int i = 1; i <= n; i++) {
+    result *= i;
+}
+System.out.println(result);
+```
+
+```java
+System.out.println(IntStream.range(2, 6).reduce(1, (x, y) -> (x * y)));
+```
+
+#### 순열
+
+> 서로 다른 n개 중에서 r개를 선택하는 경우의 수 (순서O, 중복X)
+>
+> 예시) 5명을 3줄로 세우는 방법
+>
+> 예시) 서로 다른 4명 중 반장, 부반장 뽑는 방법
+
+![image](https://user-images.githubusercontent.com/105831105/170264374-1bc7d415-6bbe-4afa-83e1-3731ef07cdc1.png)
+
+```java
+int n = 5;
+int r = 3;
+int result = 1;
+
+for (int i = n; i >= n - r + 1; i--) {
+    result *= i;
+}
+System.out.println(result);
+```
+
+
+
+#### 중복 순열
+
+> 서로 다른 n개 중에 r개를 선택하는 경우의 수 (순서O, 중복O)
+>
+> 예시) 서로 다른 4개의 수 중 2개를 뽑는 방법 (중복 허용)
+>
+> 예시) 후보 2명, 유권자 3명일 때 기명 투표 방법
+
+![image](https://user-images.githubusercontent.com/105831105/170265236-27e32e3e-a4b5-42dc-ba10-27b1c4209dcf.png)
+
+```java
+int n = 4;
+int r = 2;
+int result = 1;
+for (int i = 0; i < r; i++) {
+    result *= n;
+}
+System.out.println(result);
+```
+
+```java
+System.out.println(Math.pow(n, r));
+```
+
+#### 원 순열
+
+> 원 모양의 테이블에 n개의 원소를 나열하는 경우의 수
+>
+> 예시) 원 모양의 테이블에 3명을 앉히는 경우
+
+![image](https://user-images.githubusercontent.com/105831105/170265521-bb3b641c-8d92-4f70-82e4-2a2175363e89.png)
+
+![원 순열 공식](https://blog.kakaocdn.net/dn/qQxR9/btqHBRtzmpx/J1LyLclK1SafprzJm77QHk/img.png)
+
+```java
+int n = 3;
+int result = 1;
+
+for (int i = 1; i < n; i++) {
+    result *= i;
+}
+System.out.println(result);
+```
+
+#### 연습
+
+````java
+//1,2,3,4를 이용해여 세자리 자연수 만드는 방법 (순서O, 중복X)
+public void permutation1(int[] arr, int depth, int n, int r) {
+
+    if (depth == r) {
+        for (int i = 0; i < r; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+        return;
+    }
+
+    for (int i = depth; i < n; i++) {
+        swap(arr, depth, i);
+        permutation1(arr, depth + 1, n, r);
+        swap(arr, depth, i);
+    }
+
+}
+void swap(int[] arr, int depth, int idx) {
+    int tmp = arr[depth];
+    arr[depth] = arr[idx];
+    arr[idx] = tmp;
+}
+void permutation2(int[] arr, int depth, int n, int r, boolean[] visited, int[] out) {
+
+    if (depth == r) {
+        System.out.println(Arrays.toString(out));
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (visited[i] != true) {
+            visited[i] = true;
+            out[depth] = arr[i];
+            permutation2(arr, depth + 1, n, r, visited, out);
+            visited[i] = false;
+        }
+    }
+    
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4};
+        boolean[] visited = new boolean[4];
+        int[] out = new int[3];
+
+        Solution solution = new Solution();
+        solution.permutation1(arr, 0, 4, 3);
+        solution.permutation2(arr, 0, 4, 3, visited, out);
+
+    }
+
+}
+````
+
 
 
 
@@ -327,8 +474,6 @@ public int getLCM(int numA, int numB){
 
 
 ---
-
-### 03. 순열
 
 ## Ch02. 선형 자료구조
 
