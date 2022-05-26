@@ -469,6 +469,17 @@ void permutation2(int[] arr, int depth, int n, int r, boolean[] visited, int[] o
 
 
 
+### 조합
+
+```java
+public int combination(int n, int r) {
+    if (n == r || r == 0)
+        return 1;
+    else
+        return combination(n - 1, r - 1) + combination(n - 1, r);
+}
+```
+
 
 
 

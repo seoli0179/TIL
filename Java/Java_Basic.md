@@ -890,9 +890,17 @@ public class Test {
 
 ## 05. 기본 API
 
-### String
+### java.lang 패키지
 
-- String
+| 클래스                            | 용도                                              |
+| --------------------------------- | ------------------------------------------------- |
+| Object                            | 자바 클래스의 최상의 클래스                       |
+| System                            | 입출력, JVM 종료, 가비지 수집기                   |
+| Class                             | 클래스를 메모리로 로딩                            |
+| Math                              | 수학 함수                                         |
+| Wraper(Byte, Integer, Boolean...) | 기본 타입을 객체, 문자열을 기본 타입, 입력값 검사 |
+
+#### String
 
 > String 자료형은 한번 값이 생성되면 그 값을 변경할 수가 없다.
 >
@@ -906,7 +914,7 @@ result += "jump to java";
 System.out.println(result);
 ```
 
-- StringBuffer
+#### StringBuffer
 
 >StringBuffer는 값을 변경할 수 있다(mutable 하다).
 >
@@ -922,7 +930,7 @@ System.out.println(sb.toString());	// hello jump to java
 System.out.println(sb.substring(0, 4));	// hell
 ```
 
-- StringBuilder
+#### StringBuilder
 
 > StringBuffer는 멀티 스레드 환경에서 안전하다는 장점이 있고, 
 >
@@ -938,6 +946,267 @@ sb.append("jump to java");
 String result = sb.toString();
 System.out.println(result);
 ```
+---
+
+### java.util 패키지
+
+| 클래스           | 용도                                |
+| ---------------- | ----------------------------------- |
+| Arrays           | 배열을 조작(비교, 복사, 정렬, 찾기) |
+| Calender         | 운영체제의 날짜와 시간              |
+| Date             | 날짜와 시간 정보를 저장             |
+| Objects          | 객체 비교, null 여부 조사           |
+| String Tokenizer | 특정 문자로 구분된 문자열 추출      |
+| Random           | 난수                                |
+
+---
+
+### Object  클래스
+
+#### equals()
+
+```java
+class Member{
+    private String id;
+    public Member(String id) {
+        this.id = id;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Member){
+            Member m = (Member) obj;
+            return id.equals(m.id);
+        }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+}
+public class MemberEx {
+    public static void main(String[] args) {
+        Member m1 = new Member("A");
+        Member m2 = new Member("A");
+        Member m3 = new Member("B");
+
+        System.out.println(m1.equals(m2));
+        System.out.println(m1.equals(m3));
+    }
+}
+```
+
+---
+
+#### hashCode()
+
+> 객체를 식별할 하나의 정수 값
+
+```java
+package ch11.sec01;
+
+import java.util.HashMap;
+import java.util.HashSet;
+
+class Key {
+    public int num;
+
+    public Key(int num) {
+        this.num = num;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Key) {
+            Key key = (Key) obj;
+            return num == key.num;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return num;
+    }
+}
+
+public class KeyEx {
+    public static void main(String[] args) {
+        HashMap<Key, String> hashMap = new HashMap<Key, String>();
+
+        hashMap.put(new Key(1),"홍길동");
+
+        String value = hashMap.get(new Key(1));
+        System.out.println(value);
+    }
+}
+
+```
+
+---
+
+#### toString()
+
+```java
+bject obj = new Object();
+Date date = new Date();
+String str = new String("홍길동");
+
+System.out.println(obj.toString());	//java.lang.Object@34ce8af7
+System.out.println(date.toString());	//Thu May 26 16:10:04 KST 2022
+System.out.println(date.toGMTString());	//26 May 2022 07:10:04 GMT
+System.out.println(date.toLocaleString());	//2022. 5. 26. 오후 4:10:04
+System.out.println(str.toString());	//홍길동
+```
+
+---
+
+#### clone()
+
+> 얕은 복제 : 필드가 참조 타입일 경우 번지가 복사된다.
+>
+> 깊은 복제 : 필드가 참조 타입 이여도 별도의 객체를 생성하여 값을 복제한다.
+
+```java
+package ch11.sec02;
+
+import java.util.Arrays;
+
+class Car{
+    public String name;
+
+    public Car(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+}
+
+class Member implements Cloneable{	//implements Cloneable 반드시 필요!
+    public String name;
+    public int age;
+    public int[] scores;
+    public Car car;
+
+    public Member(String name, int age, int[] scores, Car car) {
+        this.name = name;
+        this.age = age;
+        this.scores = scores;
+        this.car = car;
+    }
+
+    public void setMember(String name, int age, int[] scores, Car car) {
+        this.name = name;
+        this.age = age;
+        this.scores = scores;
+        this.car = car;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Member m = (Member) super.clone();
+        //m.name = new String(this.name); 안해도 됨!
+        m.scores = Arrays.copyOf(this.scores,this.scores.length);   //객체 번지수 변경
+        m.car = new Car(this.car.name);    //객체 번지수 변경
+        return m;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", scores=" + Arrays.toString(scores) +
+                ", car=" + car +
+                '}';
+    }
+
+    public Member getMember(){
+        Member m = null;
+        try {
+            m = (Member) clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return m;
+    }
+}
+public class CloneEx {
+    public static void main(String[] args) {
+        Member oldM = new Member("a", 1, new int[]{80, 80}, new Car("소나타"));
+        Member newM = oldM.getMember();
+
+        oldM.scores[0] = 1;
+        oldM.car.name = "bb";
+
+        System.out.println(oldM.toString());
+        System.out.println(newM.toString());
+    }
+}
+```
+
+---
+
+#### finalize()
+
+> **종료자 메소드는 사용을 권장하지 않는다. **
+>
+> 자바 가상머신(JVM : java virtual machine)이 더 이상 사용하지 않는 자원에 대한 정리 작업을 진행하기 위해 호출되는 종료자 메소드이다.
+>
+> 가비지 컬렉션의 실행 시점이 불분명하기 때문에 finalize 메소드를 사용하더라도 실행을 보장하지 않는다. 
+
+```java
+class Counter{
+    private int no;
+    public Counter(int no) {
+        this.no = no;
+    }
+    
+    // 사용을 권장하지 않는다! 보통 JVM이 자동으로 해준다.
+    @Override
+    protected void finalize() throws Throwable {
+        System.out.println(no+"번 객체의 finalize()가 실행됨");
+    }
+}
+public class FinalizeEx {
+    public static void main(String[] args) {
+        Counter counter = null;
+        for (int i = 0; i < 50; i++) {
+            counter = new Counter(i);
+            counter = null;
+            System.gc();	
+        }
+    }
+}
+```
+
+---
+
+### System 클래스
+
+#### exit()
+
+> 강제로 JVM 종료
+
+```java
+System.exit(0);
+```
+
+#### gc()
+
+> 가비지 수집기(쓰레기 수집기)
+>
+> **사용을 권장하지 않음**
+
+```java
+System.gc();
+```
 
 ----
 
@@ -946,6 +1215,152 @@ System.out.println(result);
 ---
 
 ## 13. 예외 처리
+
+### NullPointerException
+
+````java
+String data = null;
+try{
+    System.out.println(data.toString());
+}catch (NullPointerException e){
+    System.out.println("NullPointerException");
+}finally {	// 생략 가능
+    System.out.println("finally");
+}
+````
+
+### ArrayIndexOutOfBoundsException
+
+```java
+int[] value = {1, 2};
+try {
+    for (int i = 0; i <= value.length; i++) {
+        System.out.println(value[i]);
+    }
+}catch (ArrayIndexOutOfBoundsException e){
+    System.out.println("ArrayIndexOutOfBoundsException");
+}
+```
+
+### NumberFormatException
+
+```java
+String a = "100";
+String b = "a100";  // 숫자로 변환 불가!
+try {
+    int result = Integer.parseInt(a) + Integer.parseInt(b);
+}catch (java.lang.NumberFormatException e){
+    System.out.println("NumberFormatException");
+}
+```
+
+### ClassCastException
+
+```java
+class Animal {}
+class Dog extends Animal {}
+class Cat extends Animal {}
+
+public class ClassCastExceptionEx {
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        Dog dog = new Dog();
+        Cat cat = new Cat();
+
+        changeDog(dog);
+        changeDog(cat); //에러! Cat은 Dog로 형변환 불가!
+    }
+    public static void changeDog(Animal animal) {
+        if(animal instanceof Dog){
+            Dog dog = (Dog) animal;
+        }
+        try {
+            Dog dog = (Dog) animal;
+        }catch (ClassCastException e){
+            System.out.println("ClassCastException");
+        }
+    }
+}
+```
+
+### ClassNotFoundException
+
+````java
+try {
+    Class clazz = Class.forName("java.lang.String2");
+}catch (ClassNotFoundException e){
+    System.out.println("ClassNotFoundException");
+}
+````
+
+
+
+### 예외 떠넘기기
+
+```java
+public static void method1(){
+    try {
+        method2();
+    }catch (NumberFormatException e){
+        System.out.println("NumberFormatException");
+    }
+}
+
+public static void method2() throws NumberFormatException{
+    System.out.println(Integer.parseInt("a123"));
+}
+```
+
+### 예외 정보얻기
+
+```java
+public class BalanceInsufficientException extends Exception {
+
+    public BalanceInsufficientException() {
+    }
+
+    public BalanceInsufficientException(String message) {
+        super(message);
+    }
+}
+
+public class Account {
+    private int balance;
+
+    public Account() {}
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void deposit(int money) {
+        balance += money;
+    }
+
+    public void withdraw(int money) throws BalanceInsufficientException {
+        if (balance < money) {
+            throw new RuntimeException("잔고부족 : " + (money - balance) + " 모자람");
+        }
+        balance -= money;
+    }
+}
+
+public class AccountMain {
+    public static void main(String[] args) {
+        Account account = new Account();
+        account.deposit(10000);
+        System.out.println(account.getBalance());
+        try {
+            account.withdraw(30000);
+        }catch (BalanceInsufficientException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
 
 ---
 
