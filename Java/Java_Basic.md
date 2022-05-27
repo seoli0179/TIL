@@ -1,3 +1,5 @@
+
+
 # Java 기본
 
 ## 01. 변수와 자료형
@@ -892,60 +894,15 @@ public class Test {
 
 ### java.lang 패키지
 
-| 클래스                            | 용도                                              |
-| --------------------------------- | ------------------------------------------------- |
-| Object                            | 자바 클래스의 최상의 클래스                       |
-| System                            | 입출력, JVM 종료, 가비지 수집기                   |
-| Class                             | 클래스를 메모리로 로딩                            |
-| Math                              | 수학 함수                                         |
-| Wraper(Byte, Integer, Boolean...) | 기본 타입을 객체, 문자열을 기본 타입, 입력값 검사 |
+| 클래스                              | 용도                                              |
+| ----------------------------------- | ------------------------------------------------- |
+| Object                              | 자바 클래스의 최상의 클래스                       |
+| System                              | 입출력, JVM 종료, 가비지 수집기                   |
+| Class                               | 클래스를 메모리로 로딩                            |
+| Math                                | 수학 함수                                         |
+| Wraper(Byte, Integer, Boolean...)   | 기본 타입을 객체, 문자열을 기본 타입, 입력값 검사 |
+| String, StringBuffer, StringBuilder |                                                   |
 
-#### String
-
-> String 자료형은 한번 값이 생성되면 그 값을 변경할 수가 없다.
->
-> 이렇게 값을 변경할 수 없는 것을 immutable 하다고 한다.
-
-```java
-String result = "";
-result += "hello";	// +연산 할 때 마다 객체 생성
-result += " ";
-result += "jump to java";
-System.out.println(result);
-```
-
-#### StringBuffer
-
->StringBuffer는 값을 변경할 수 있다(mutable 하다).
->
->StringBuffer 자료형은 String 자료형보다 무거운 편에 속한다. 
-
-```java
-StringBuffer sb = new StringBuffer();  // 최초 한 번만 객체 생성
-sb.append("hello");
-sb.append(" ");
-sb.append("jump to java");
-sb.insert(0, "hello ");
-System.out.println(sb.toString());	// hello jump to java
-System.out.println(sb.substring(0, 4));	// hell
-```
-
-#### StringBuilder
-
-> StringBuffer는 멀티 스레드 환경에서 안전하다는 장점이 있고, 
->
-> StringBuilder는 StringBuffer보다 성능이 우수한 장점이 있다. 
->
-> 따라서 동기화를 고려할 필요가 없는 상황에서는 StringBuffer 보다는 StringBuilder를 사용하는 것이 유리하다.
-
-```java
-StringBuilder sb = new StringBuilder();
-sb.append("hello");
-sb.append(" ");
-sb.append("jump to java");
-String result = sb.toString();
-System.out.println(result);
-```
 ---
 
 ### java.util 패키지
@@ -1207,6 +1164,475 @@ System.exit(0);
 ```java
 System.gc();
 ```
+
+#### 현재 시간 읽기
+
+```java
+System.out.println(System.currentTimeMills());
+System.out.println(System.nanoTime());
+```
+
+#### 시스템 프로퍼티
+
+| 키(key)        | 설명               | 값(Value)                     |
+| -------------- | ------------------ | ----------------------------- |
+| java.version   | 자바 버전          | 1.8.0_20                      |
+| java.home      | JRE 경로           | <jdk 설치경로>\jre            |
+| os.name        | OS이름             | Windows 11                    |
+| file.separator | \                  | \                             |
+| user.name      | 사용자 이름        | 사용자계정                    |
+| user.home      | 사용자 홈 디렉토리 | C:\Users\사용자계정           |
+| user.dir       | 디렉토리 경로      | C;\Users\사용자계정\Workspace |
+
+#### 환경변수 읽기
+
+````java
+System.out.println(System.getenv("JAVA_HOME"));
+````
+
+---
+
+### Class 클래스
+
+
+
+---
+
+### String 클래스
+
+#### String
+
+```java
+// 바이트 변환
+byte[] bytes = {72, 101, 108, 108, 111, 32, 74, 97, 118, 97};
+byte[] inputBytes = new byte[100];
+
+int readByteNo = System.in.read(inputBytes);
+
+String str = new String(bytes);
+byte[] bytes1 = str.getBytes();	//String -> byte
+byte[] bytes2 = str.getBytes(StandardCharsets.UTF_8);
+String str2 = new String(bytes2, StandardCharsets.UTF_8);	//byte -> String
+
+System.out.println(new String(bytes));	// Hello Java
+System.out.println(new String(inputBytes, 0, readByteNo - 1));	// '\n' 넘김
+System.out.println(Arrays.toString(bytes1));
+System.out.println(Arrays.toString(bytes2));
+
+// int 변환
+String str3 = "123";
+int intValue = Integer.parseInt(str3);
+String str4 = Integer.toString(intValue);
+```
+
+```java
+
+String str = "Hello World!";
+char[] chars = str.toCharArray(); // String -> char
+char c1 = str.charAt(3);
+String str2 = String.valueOf(chars);	// char -> String
+String str3 = new String(chars);	// char -> String
+
+System.out.println(Arrays.toString(chars));
+System.out.println(c1); // l
+System.out.println(str2);
+System.out.println(str3);
+```
+
+```java
+String str1 = "홍길동";
+String str2 = new String("홍길동");
+System.out.println(str1.equals(str2));
+```
+
+```java
+String email = "abc@gmail.com";
+System.out.println(email.indexOf("gmail"));
+System.out.println(email.contains("@"));
+email = email.replace("gmail","naver");
+System.out.println(email);
+System.out.println(email.substring(email.indexOf("@") + 1,email.length()));
+System.out.println(email.substring(0,email.indexOf("@")).toUpperCase());
+email = "   " + email + "    ";
+email = email.trim();
+System.out.println(email);
+System.out.println(String.valueOf(10.5));
+String[] value = email.split("@");
+System.out.println(Arrays.toString(value));
+
+```
+
+#### StringTokenizer
+
+```java
+String name = "홍길동/이수홍/박연수";
+StringTokenizer st = new StringTokenizer(name,"/");
+int a = st.countTokens();
+for (int i = 0; i < a; i++) {
+    System.out.println(st.nextToken());
+}
+
+st = new StringTokenizer(name,"/");
+while (st.hasMoreTokens()){
+    System.out.println(st.nextToken());
+}
+```
+
+
+
+#### StringBuffer
+
+>StringBuffer는 값을 변경할 수 있다(mutable 하다).
+>
+>StringBuffer 자료형은 String 자료형보다 무거운 편에 속한다. 
+
+```java
+StringBuffer sb = new StringBuffer();  // 최초 한 번만 객체 생성
+sb.append("hello");
+sb.append(" ");
+sb.append("jump to java");
+sb.insert(0, "hello ");
+System.out.println(sb.toString());	// hello jump to java
+System.out.println(sb.substring(0, 4));	// hell
+```
+
+#### StringBuilder
+
+> StringBuffer는 **멀티 스레드 환경**에서 안전하다는 장점이 있고, 
+>
+> StringBuilder는 StringBuffer보다 성능이 우수한 장점이 있다. 
+>
+> 따라서 동기화를 고려할 필요가 없는 상황에서는 StringBuffer 보다는 StringBuilder를 사용하는 것이 유리하다.
+
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("hello");
+sb.append(" ");
+sb.append("jump to java");
+String result = sb.toString();
+System.out.println(result);
+```
+
+---
+
+#### 정규 표현식
+
+| 기호  | 설명                                                         |
+| ----- | ------------------------------------------------------------ |
+| []    | 1개의 문자 / [abc] a,b,c중 1개 / [&#94;abc] a,b,c이외의 1개 / [a-zA-Z] a~z, A~Z중에 1개 |
+| \d    | 1개의 숫자, [0-9]와 동일                                     |
+| \s    | 공백                                                         |
+| \w    | 1개의 알파벳 또는 한 개의 숫자, [a-zA-Z_0-9]와 동일          |
+| ?     | 없음 또는 1개                                                |
+| *     | 없음 또는 1개 이상                                           |
+| +     | 1개 이상                                                     |
+| {n}   | 정확히 n개                                                   |
+| {n,}  | 최소한 n개                                                   |
+| {n,m} | n개 ~ m개까지                                                |
+| ()    | 그룹핑                                                       |
+
+```java
+String phone = "010-2846-9777";
+System.out.println(Pattern.matches("(02|010)-\\d{3,4}-\\d{4}",phone));
+
+String email = "abc@gamil.com";
+System.out.println(Pattern.matches("\\w+@\\w+\\.\\w+(\\.\\w+)?",email));
+```
+
+---
+
+### Arrays 클래스
+
+#### 배열 복사
+
+```java
+int[] a = {1, 2, 3, 4};
+int[] b = Arrays.copyOf(a, a.length - 1);
+int[] c = Arrays.copyOfRange(a, 1, a.length);
+int[] d = new int[a.length];
+System.arraycopy(a, 0, d, 0, a.length);
+
+a[0] = 9;
+
+System.out.println(Arrays.toString(a));
+System.out.println(Arrays.toString(b));
+System.out.println(Arrays.toString(c));
+System.out.println(Arrays.toString(d));
+
+//얕은 복사
+int[][] e = {{1, 2}, {3, 4}};
+int[][] f = Arrays.copyOf(e, e.length);
+
+System.out.println(e.equals(f));    // 배열 번지 : false
+System.out.println(Arrays.equals(e, f));    // 1차 배열 번지 비교 : true
+System.out.println(Arrays.deepEquals(e, f));    //중첩 배열 항목값 비교 : true
+
+e[0][0] = 9;
+
+System.out.println(Arrays.toString(e[0]));
+System.out.println(Arrays.toString(f[0]));
+
+// 깊은 복사
+int[][] f2 = Arrays.copyOf(e,e.length);
+f2[0] = Arrays.copyOf(e[0],e[0].length);
+f2[1] = Arrays.copyOf(e[1],e[1].length);
+
+System.out.println(e.equals(f2));    // 배열 번지 : false
+System.out.println(Arrays.equals(e, f2));    // 1차 배열 번지 비교 : false
+System.out.println(Arrays.deepEquals(e, f2));    //중첩 배열 항목값 비교 : true
+```
+
+---
+
+#### 배열 정렬
+
+```java
+int[] a = {3, 5, 7, 1};
+Arrays.sort(a);	// 오른차순
+
+Integer[] b = Arrays.stream(a).boxed().toArray(Integer[]::new);
+Arrays.sort(b, Collections.reverseOrder());	// 내림차순
+
+System.out.println(Arrays.toString(a));
+System.out.println(Arrays.toString(b));
+```
+
+---
+
+#### 배열 검색
+
+```java
+class Member implements Comparable<Member> {
+    private String name;
+
+    public Member(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int compareTo(Member o) {
+        return name.compareTo(o.name);
+    }
+}
+
+public class ArrayEx {
+    public static void main(String[] args) {
+
+        int[] a = {3, 5, 7, 1};
+        System.out.println(Arrays.binarySearch(a, 7));
+
+        String[] b = {"aaa", "bbb", "ccc"};
+        System.out.println(Arrays.binarySearch(b, "bbb"));
+
+        Member m1 = new Member("ddd");
+        Member m2 = new Member("eee");
+        Member m3 = new Member("fff");
+
+        Member[] members = {m1, m2, m3};
+        System.out.println(Arrays.binarySearch(members, m2));
+
+    }
+}
+```
+
+---
+
+### Wrapper(포장) 클래스
+
+```java
+Integer integer1 = Integer.valueOf("1000");
+Integer integer2 = 100;   // 자동 박싱
+
+int a = integer1;   // 자동 언박싱
+integer1 = 100;
+
+int b = Integer.parseInt("1000");	// String -> int
+String str = Integer.toString(b);	// int -> String
+
+System.out.println(integer1.equals(integer2));
+```
+
+### Math 클래스
+
+| 메소드   | 설명                 |
+| -------- | -------------------- |
+| abs      | 절대값               |
+| ceil     | 올림값               |
+| floor    | 내림값               |
+| max      | 최대값               |
+| min      | 최소값               |
+| random() | 랜덤값               |
+| rint     | 가까운 정수의 실수값 |
+| round    | 반올림값             |
+
+`0.0 <= Math.random() < 1.0`
+
+### Random 클래스
+
+| Math.random()                    | Random                                                |
+| -------------------------------- | ----------------------------------------------------- |
+| 0 <= n < 1 double 난수           | boolean, int, long, float, double 난수를 얻을 수 있음 |
+| 종자값(seed)이 현재시간으로 고정 | 종자값(seed)을 설정할 수 있음 / 설정하지 않으면 랜덤  |
+
+```java
+int a = (int) (Math.random() * 6) + 1;
+int b = new Random().nextInt(6) + 1;
+```
+
+---
+
+### Format 클래스
+
+| 기호   | 의미                              | 패턴 예 | 1234567.89</br>변환 결과 |
+| ------ | --------------------------------- | ------- | --------- |
+| 0      | 10진수(빈자리는 0으로 채움)       | 0 </br>0.0</br>0000000000.00000 | 1234568</br>1234567.9</br>0001234567.89000 |
+| #      | 10진수                            | &#35;</br>&#35;.&#35;</br>&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;&#35;.&#35;&#35;&#35;&#35;&#35; | 1234568</br>1234567.9</br>1234567.89 |
+| .      | 소수점                            | &#35;.0 | 1234567.9 |
+| -      | 음수 기호                         | &#43;&#35;.0</br>&#45;&#35;.0 | &#43;1234567.9</br>&#45;1234567.9 |
+| ,      | 단위 구분                         | &#35;,&#35;&#35;&#35;.0 | 1,234,567.9 |
+| E      | 지수 문자                         | 0.0E0 | 1.2E6 |
+| ;      | 양수와 음수 모두 기술할 때 구분자 | &#43;&#35;,&#35;&#35;&#35; ; &#45;&#35;,&#35;&#35;&#35; | &#43;1234567.9(양수일 때)</br>&#45;1234567.9(음수일 때) |
+| %      | 100을 곱한 후 % 문자를 붙임       | &#35;,&#35; % | 123456789% |
+| \u00A4 | 통화기호                          | \u00A4 &#35;,&#35;&#35;&#35; | &#8361; 1,234,568 |
+
+```java
+double num = 1234567.89;
+
+System.out.println(new DecimalFormat("0").format(num)); // 1234568
+System.out.println(new DecimalFormat("0.0").format(num)); // 1234567.9
+System.out.println(new DecimalFormat("0000000000.00000").format(num)); // 0001234567.89000
+System.out.println(new DecimalFormat("#").format(num)); // 1234568
+System.out.println(new DecimalFormat("#.#").format(num)); // 1234567.9
+System.out.println(new DecimalFormat("##########.#####").format(num)); // 1234567.89
+System.out.println(new DecimalFormat("#.0").format(num)); // 1234567.9
+System.out.println(new DecimalFormat("+#.0").format(num)); // +1234567.9
+System.out.println(new DecimalFormat("-#.0").format(num)); // -1234567.9
+System.out.println(new DecimalFormat("#,###.0").format(num)); // 1,234,567.9
+System.out.println(new DecimalFormat("0.0E0").format(num)); //1.2E6
+System.out.println(new DecimalFormat("+#,### ; -#,###").format(num)); // +1,234,568 
+System.out.println(new DecimalFormat("#.# %").format(num)); // 123456789 %
+System.out.println(new DecimalFormat("\u00A4 #,###").format(num)); // ₩ 1,234,568
+```
+
+
+
+---
+
+### 날짜 형식 클래스
+
+#### SimpleDateFormat
+
+| 패턴 문자 | 의미                     | 패턴 문자 | 의미                 |
+| --------- | ------------------------ | --------- | -------------------- |
+| y         | 년                       | H         | 시(0~23)             |
+| M         | 월                       | h         | 시(1~12)             |
+| d         | 일                       | K         | 시(0~11)             |
+| D         | 월 구분이 없는 일(1~365) | k         | 시(1~24)             |
+| E         | 요일                     | m         | 분                   |
+| a         | 오전/오후                | s         | 초                   |
+| w         | 년의 몇 번째 주          | S         | 밀리세컨드(1/1000초) |
+| W         | 월의 몇 번째 주          |           |                      |
+
+```java
+System.out.println(new Date());	// Fri May 27 16:10:00 KST 2022
+System.out.println(new SimpleDateFormat("yyyy년 MM월 dd일 E요일 w주 HH:mm:ss").format(new Date()));	// 2022년 05월 27일 금요일 22주 16:19:47
+```
+
+#### Calendar
+
+| 상수                     | 사용방법               | 설명                           |
+| ------------------------ | ---------------------- | ------------------------------ |
+| static int YEAR          | Calendar.YEAR          | 현재 년도                      |
+| static int MONTH         | Calendar.MONTH         | 현재 월 (1월: 0)               |
+| static int DATE          | Calendar.DATE          | 현재 월의 날짜                 |
+| static int WEEK_OF_YEAR  | Calendar.WEEK_OF_YEAR  | 현재 년도의 몇째 주            |
+| static int WEEK_OF_MONTH | Calendar.WEEK_OF_MONTH | 현재 월의 몇째 주              |
+| static int DAY_OF_YEAR   | Calendar.DAY_OF_YEAR   | 현재 년도의 날짜               |
+| static int DAY_OF_MONTH  | Calendar.DAY_OF_MONTH  | 현재 월의 날짜                 |
+| static int DAY_OF_WEEK   | Calendar.DAY_OF_WEEK   | 현재 요일(일요일:1 ,토요일: 7) |
+| static int HOUR          | Calendar.HOUR          | 현재 시간 (12시간제)           |
+| static int HOUR_OF_DAY   | Calendar.HOUR_OF_DAY   | 현재 시간 (24시간제)           |
+| static int MINUTE        | Calendar.MINUTE        | 현재 분                        |
+| static int SECOND        | Calendar.SECOND        | 현재 초                        |
+
+```java
+Calendar today = Calendar.getInstance();
+int year = today.get(Calendar.YEAR);
+int month = today.get(Calendar.MONTH);
+int date = today.get(Calendar.DATE);
+
+int woy = today.get(Calendar.WEEK_OF_YEAR);	// 현재 년도의 몇째 주
+int wom = today.get(Calendar.WEEK_OF_MONTH);	// 현재 월의 몇째 주
+
+int doy = today.get(Calendar.DAY_OF_YEAR);	//0~365
+int dom = today.get(Calendar.DAY_OF_MONTH);	//0~52
+int dow = today.get(Calendar.DAY_OF_WEEK);	//요일
+
+int hour12 = today.get(Calendar.HOUR);	//12시제
+int hour24 = today.get(Calendar.HOUR_OF_DAY);	//24시제
+int minute = today.get(Calendar.MINUTE);
+int second = today.get(Calendar.SECOND);
+
+int milliSecond = today.get(Calendar.MILLISECOND);
+int timeZone = today.get(Calendar.ZONE_OFFSET);	// 표준시
+int lastDate = today.getActualMaximum(Calendar.DATE);
+
+System.out.println("오늘은 " + year + "년 " + month + 1 + "월" + date + "일");
+System.out.println("오늘은 올해의 " + woy + "째주, 이번달의 " + wom + "째주. " + date + "일");
+System.out.println("오늘은 이번 해의 " + doy + "일이자, 이번 달의 " + dom + "일. 요일은 " + dow + "일 (1:일요일)");
+System.out.println("현재 시각은 " + hour12 + ":" + minute + ":" + second + ", 24시간으로 표현하면 " + hour24 + ":" + minute + ":" + second);
+System.out.println("오늘은 " + year + "년 " + month + 1 + "월" + date + "일");
+System.out.println("이 달의 마지막 날: " + lastDate);
+```
+
+#### LocalDate
+
+```java
+// 달력 출력 프로그램
+Scanner sc = new Scanner(System.in);
+int year, month;
+
+System.out.println("[달력 출력 프로그램]");
+System.out.print("달력의 년도를 입력해 주세요. (yyyy) : ");
+year = sc.nextInt();
+System.out.print("달력의 월을 입력해 주세요. (mm) : ");
+month = sc.nextInt();
+
+LocalDate ld = LocalDate.of(year, month, 1);
+
+System.out.printf("\n\n\n[%d년 %02d월]\n", year, month);
+System.out.println("일\t월\t화\t수\t목\t금\t토");
+
+int cnt = 0;
+for (int i = 0; i < ld.getDayOfWeek().getValue() % 7; i++) {
+    System.out.print("\t");
+    cnt++;
+}
+for (int i = 1; i <= ld.lengthOfMonth(); i++) {
+    if (cnt > 6) {
+        System.out.println();
+        cnt = 0;
+    }
+    System.out.printf("%02d\t", i);
+    cnt++;
+}
+
+sc.close();
+```
+
+---
+
+### 문자열 형식 클래스(MessageFormat)
+
+```java
+tring id = "java", name = "홍길동", tel = "010-1234-5678";
+System.out.println(MessageFormat.format("회원 ID : {0} \n회원 이름 : {1}\n회원 전화 : {2}", id, name, tel));
+
+Object[] arguments = {"'python'", "'이몽룡'", "'010-1111-2222'"};
+System.out.println(MessageFormat.format("insert into member values({0},{1},{2})", arguments));
+```
+
+
 
 ----
 
