@@ -915,6 +915,38 @@ public class Test {
 | Objects          | 객체 비교, null 여부 조사           |
 | String Tokenizer | 특정 문자로 구분된 문자열 추출      |
 | Random           | 난수                                |
+| Iterator         | 반복자                              |
+
+#### Iterator
+
+> Iterator란 자바의 컬렉션(Collection)에 저장되어 있는 요소들을 순회하는 인터페이스이다.
+>
+> **컬렉션 프레임워크에 대해 공통으로 사용이 가능**하고 **사용법이 간단**하다.
+
+```java
+public class IteratorTest {
+ 
+    public static void main(String[] args) {
+        
+        List<Integer> list = new ArrayList<Integer>();
+ 
+        for(int i = 0;i <= 100; i++) {
+            list.add(i);
+        }
+        
+        Iterator<Integer> iter = list.iterator();
+        
+        while(iter.hasNext()) {
+            int data = iter.next();
+            System.out.print(data);
+        }
+        
+    }
+    
+}
+```
+
+
 
 ---
 
@@ -1792,18 +1824,233 @@ public class AccountMain {
 
 ## 14. 컬렉션 프레임워크
 
+> 자바에서 컬렉션 프레임워크(collection framework)란 다수의 데이터를 쉽고 효과적으로 처리할 수 있는 표준화된 방법을 제공하는 클래스의 집합을 의미한다
+>
+> 즉, 데이터를 저장하는 자료 구조와 데이터를 처리하는 알고리즘을 구조화하여 클래스로 구현해 놓은 것ㅣ다.
+>
+> 이러한 컬렉션 프레임워크는 자바의 인터페이스(interface)를 사용하여 구현된다.
+
+![image](https://user-images.githubusercontent.com/105831105/170936474-cd32378b-dbe6-4396-ac4a-9a75f9c1e050.png)
+
+| 인터페이스 |                             설명                             |                 구현 클래스                 |
+| :--------: | :----------------------------------------------------------: | :-----------------------------------------: |
+|  List<E>   |    순서가 있는 데이터의 집합으로, 데이터의 중복을 허용함.    | Vector, ArrayList, LinkedList, Stack, Queue |
+|   Set<E>   | 순서가 없는 데이터의 집합으로, 데이터의 중복을 허용하지 않음. |              HashSet, TreeSet               |
+| Map<K, V>  | 키와 값의 한 쌍으로 이루어지는 데이터의 집합으로, 순서가 없음.이때 키는 중복을 허용하지 않지만, 값은 중복될 수 있음. |   HashMap, TreeMap, Hashtable, Properties   |
+
+### List
+
+|           | array                                      | arrayList                                           |
+| --------- | ------------------------------------------ | --------------------------------------------------- |
+| 사이즈    | 초기화시 고정                              | 초기화시 사이즈를 표시하지 않음. 사이즈가 동적이다. |
+| 속도      | 초기화 시 메모리에 할당되어 속도 빠름      | 추가시 메모리를 재할당하여 속도가 느림              |
+| 변경      | 사이즈 변경 불가                           | 추가,삭제 가능                                      |
+| 다차원    | 가능                                       | 불가능                                              |
+| 타입      | primitive type(int,byte, char etc), object | object elemnet만 가능                               |
+| 제네릭    | 사용 불가능                                | 사용 가능(타입 안정성 보장)                         |
+| 길이      | length 변수                                | size() 메서드                                       |
+| 변수 추가 | assignment 연산자 사용                     | add() 메소드 사용                                   |
+
+#### ArrayList
+
+![image](https://user-images.githubusercontent.com/105831105/170907354-472beb80-65e0-460e-b8e6-eee32ae8aff6.png)
+
+```java
+public class ArrayListEmpMain {
+    public static void main(String[] args) {
+        ArrayList<Employee> arrayList = new ArrayList<>();
+
+        arrayList.addAll(List.of(new Employee[]{
+                new Employee(1001, "이사원", 3000.55),
+                new Employee(1002, "김대리", 4000.75),
+                new Employee(1003, "박과장", 5000.77)
+        }));
+
+        for(Employee i : arrayList){
+            System.out.println(i);
+        }
+
+        Iterator<Employee> it = arrayList.iterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
+
+    }
+}
+```
+
+#### Vector
+
+> Vector클레스는 ArrayList 클레스의 구조와 비슷하지만 이 둘의 차이점은 **멀티스레드의 환경**에서 데이터를 처리를 하는지이다.
+>
+> Vector클레스는 **동기화된(synchronized) 메소드**로 구성이 되어 있다. 
+>
+> 따라서 멀티 스레드 환경에서 동시에 이 메소드를 접근을 할 수 없도록 구성 되어 있으며, 이를 스레드 안전 (Thread safe)라고 한다
+
+#### LinkedList
+
+![image](https://user-images.githubusercontent.com/105831105/170907513-83c86f47-4ee4-4b44-bbd7-bf7f31d2e1c2.png)
+
+> linkedList 같은경우는 ArrayList와 사용 방법이 같다. 하지만 안의 내부구조가 다르다. 
+>
+> ArrayList같은경우는 index에 의해서 관리가 되어 진다고 하면, LinkedList 같은경우는 인접해있는 노드를 연결해서 체인처럼 연결이 되어 있다. 
+>
+> 따라서 중간의 데이터를 제거 하고싶다면 중간의 양쪽노드를 서로 이어주면 자동적으로 중간의 데이터는 없어지게 되는 것이다.
+
+| 구분       | 순차적으로 추가/삭제 | 중간에 추가/삭제 | 검색   |
+| ---------- | -------------------- | ---------------- | ------ |
+| ArrayList  | 빠르다               | 느리다           | 빠르다 |
+| LinkedList | 느리다               | 빠르다           | 느리다 |
+
+### Set
+
+![image](https://user-images.githubusercontent.com/105831105/170936846-653495c2-c737-4f4b-8abc-66f2770591aa.png)
+
+#### HashSet
+
+```java
+public class Member {
+    private String name;
+    private int age;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name,age);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj instanceof Member) {
+            Member member = (Member) obj;
+            return this.name.equals(member.name) && this.age == member.age;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name + "-" + age;
+    }
+
+    public Member(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+public class MemberMain {
+    public static void main(String[] args) {
+        Member m1  = new Member("a",1);
+        Member m2  = new Member("a",1);
+        Set<Member> set = new HashSet<>();
+
+        set.add(m1);
+        set.add(m2);
+
+        Iterator it = set.iterator();
+
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
+
+
+    }
+}
+```
+
+#### TreeSet
+
+> 순서 보장 중복 비허용
+
+---
+
+### Map
+
+![image](https://user-images.githubusercontent.com/105831105/170937137-3564ecf9-504e-457e-b109-6460ffd477c2.png)
+
+
+
+#### hashMap
+
+![image](https://user-images.githubusercontent.com/105831105/170937179-a050ecb3-bea5-464f-98e4-7742140f7b06.png)
+
+```java
+public static void main(String[] args) {
+    Map<Integer, String> map = new HashMap<>();
+
+    map.put(1, "홍길동");
+    map.put(2, "이춘향");
+    map.put(2, "aaa");  // 기존값 대체!
+
+    Set<Integer> keySet = map.keySet();
+
+    Iterator<Integer> keyIterator = keySet.iterator();
+    while (keyIterator.hasNext()){
+        int key = keyIterator.next();
+        System.out.println(key + " : " + map.get(key));
+    }
+
+}
+```
+
+```java
+package ch13.sec14;
+
+import java.util.Objects;
+
+public class Student {
+    private String year, name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(year, student.year) && Objects.equals(name, student.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(year, name);
+    }
+
+    public Student(String year, String name) {
+        this.year = year;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "year='" + year + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}
+
+public class HashMapMain {
+    public static void main(String[] args) {
+        Map<Student,Integer> map = new HashMap<>();
+
+        map.put(new Student("2019001","홍길동"),100);
+        map.put(new Student("2019002","이몽룡"),95);
+        map.put(new Student("2019002","이몽룡"),80);
+
+        Set<Student> keySet = map.keySet();
+
+        for (Student student : keySet) {
+            System.out.println(student.toString() + " " + map.get(student));
+        }
+
+
+    }
+}
+```
+
+
+
 ---
 
 ## 15. 람다식
 
----
-
-## 16. 스트림
-
-### 1. HashSet
-
-- 중복값을 허용하지 않는다.
-
-### 2. TreeSet
-
-- 순서를 보장한다.
